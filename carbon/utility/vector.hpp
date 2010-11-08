@@ -134,4 +134,57 @@ at_c(const vector<T, Rest> &v)
   return at_c<N-1>(v.rest);
 }
 
+struct append_vectors {
+
+  template<typename>
+  struct result;
+
+  template<typename This, typename T1, typename T2, typename Rest>
+  struct result<This(const vector<T1, endmarker>&, const vector<T2, Rest>&)> {
+    typedef vector<T1, vector<T2, Rest> > type;
+  };
+
+  template<typename This, typename T1, typename Rest1, typename T2, typename Rest2>
+  struct result<This(const vector<T1, Rest1>&, const vector<T2, Rest2>&)> {
+    typedef typename result<This(const Rest1&, const vector<T2, Rest2>&)>::type t1;
+    typedef vector<T1, t1> type;
+  };
+
+  template<typename T1, typename T2, typename Rest>
+  typename result<append_vectors(const vector<T1, endmarker>&, const vector<T2, Rest>&)>::type
+  operator()(const vector<T1, endmarker> &v1, const vector<T2, Rest> &v2) {
+    typename result<append_vectors(const vector<T1, endmarker>&, const vector<T2, Rest>&)>::type
+      retval = {v1.elem, v2};
+    return retval;
+  }
+
+  template<typename T1, typename Rest1, typename T2, typename Rest2>
+  typename result<append_vectors(const vector<T1, Rest1>&, const vector<T2, Rest2>&)>::type
+  operator()(const vector<T1, Rest1> &v1, const vector<T2, Rest2> &v2) {
+    typename result<append_vectors(const vector<T1, Rest1>&, const vector<T2, Rest2>&)>::type
+      retval = {v1.elem, append_vectors()(v1.rest, v2) };
+    return retval;
+  }
+};
+
+namespace debug {
+#include <iostream>
+
+template<typename T>
+std::ostream &operator <<(std::ostream &O, const vector<T, endmarker> &v)
+{
+  O << v.elem;
+  return O;
+}
+
+template<typename T, typename Rest>
+std::ostream &operator <<(std::ostream &O, const vector<T, Rest> &v)
+{
+  O << v.elem << ", ";
+  O << v.rest;
+  return O;
+}
+
+}
+
 } }

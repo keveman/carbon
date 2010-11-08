@@ -38,5 +38,9 @@ int main()
                    _a, _b = 3, _c=_d];
 
   cout << matches<expr<tag::add, int>, tag::add, _>::value << "\n";
+
+  using namespace carbon::utility::debug;
+  
+  cout << "vector :" << append_vectors()(make_vector()(1,"teST"), make_vector()(2, "test2")) << "\n";
   return 0;
 }
