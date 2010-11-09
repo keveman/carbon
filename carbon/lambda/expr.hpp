@@ -30,6 +30,8 @@ TAG(subscript)
 TAG(term)
 TAG(assign)
 TAG(comma)
+TAG(iftag)
+TAG(itetag)
 
 #undef TAG
 }
@@ -58,9 +60,19 @@ struct expr {
   typedef expr<thetag, C0, C1, C2, C3> type;
 
   template<typename RHS>
-  expr<tag::subscript, type, RHS>
+  typename enable_if_c<isexpr<RHS>::value,
+  expr<tag::subscript, type, RHS> >::type
   operator [](const RHS &rhs) const {
     expr<tag::subscript, type, RHS> retval = {*this, rhs};
+    return retval;
+  }
+
+  template<typename RHS>
+  typename enable_if_c<!isexpr<RHS>::value,
+  expr<tag::subscript, type, expr<tag::term, RHS> > >::type
+  operator [](const RHS &rhs) const {
+    expr<tag::term, RHS> t = {rhs};
+    expr<tag::subscript, type, expr<tag::term, RHS> > retval = {*this, t};
     return retval;
   }
 
@@ -101,29 +113,29 @@ struct isexpr<expr<thetag, C0, C1, C2, C3> > {
 
 #define DEF(TAG, OP)                                                    \
 template<typename LHS, typename RHS>                                    \
- typename enable_if_c<(isexpr<LHS>::value && isexpr<RHS>::value), \
-expr<TAG, const LHS&, const RHS&> >::type                               \
+ typename enable_if_c<(isexpr<LHS>::value && isexpr<RHS>::value),       \
+expr<TAG, LHS, RHS> >::type                                             \
  operator OP(const LHS &lhs, const RHS &rhs)                            \
 {                                                                       \
-  expr<TAG, const LHS&, const RHS&> e = { lhs, rhs };                   \
+  expr<TAG, LHS, RHS> e = { lhs, rhs };                                 \
   return e;                                                             \
 }                                                                       \
  template<typename LHS, typename RHS>                                   \
- typename enable_if_c<(isexpr<LHS>::value && !(isexpr<RHS>::value)), \
- expr<TAG, const LHS&, expr<tag::term, RHS> > >::type                   \
+ typename enable_if_c<(isexpr<LHS>::value && !(isexpr<RHS>::value)),    \
+ expr<TAG, LHS, expr<tag::term, RHS> > >::type                          \
  operator OP(const LHS &lhs, const RHS &rhs)                            \
  {                                                                      \
    expr<tag::term, RHS> rhsterm = { rhs };                              \
-   expr<TAG, const LHS&, expr<tag::term, RHS> > e = { lhs, rhsterm };   \
+   expr<TAG, LHS, expr<tag::term, RHS> > e = { lhs, rhsterm };          \
    return e;                                                            \
  }                                                                      \
  template<typename LHS, typename RHS>                                   \
- typename enable_if_c<(!(isexpr<LHS>::value) && isexpr<RHS>::value), \
- expr<TAG, expr<tag::term, LHS>, const RHS&> >::type                    \
+ typename enable_if_c<(!(isexpr<LHS>::value) && isexpr<RHS>::value),    \
+ expr<TAG, expr<tag::term, LHS>, RHS> >::type                           \
  operator OP(const LHS &lhs, const RHS &rhs)                            \
  {                                                                      \
    expr<tag::term, LHS> lhsterm = { lhs };                              \
-   expr<TAG, expr<tag::term, LHS>, const RHS&> e = { lhsterm, rhs };    \
+   expr<TAG, expr<tag::term, LHS>, RHS> e = { lhsterm, rhs };           \
    return e;                                                            \
  }
 
@@ -133,7 +145,7 @@ DEF(tag::mul, *)
 DEF(tag::div, /)
 #define COMMA ,
 DEF(tag::comma, COMMA)
-
+#undef COMMA
 #undef DEF
 
 template<typename E,
@@ -164,5 +176,22 @@ static const expr<tag::term, localvar<0> > _a = {{}};
 static const expr<tag::term, localvar<1> > _b = {{}};
 static const expr<tag::term, localvar<2> > _c = {{}};
 static const expr<tag::term, localvar<3> > _d = {{}};
+
+template<typename RHS>
+typename enable_if_c<isexpr<RHS>::value,
+expr<tag::iftag, RHS> >::type
+if_(const RHS &e) {
+  expr<tag::iftag, RHS> retval = {e};
+  return retval;
+}
+
+template<typename RHS>
+typename enable_if_c<!isexpr<RHS>::value,
+expr<tag::iftag, expr<tag::term, RHS> > >::type
+if_(const RHS &e) {
+  expr<tag::term, RHS> t = {e};
+  expr<tag::iftag, expr<tag::term, RHS> > retval = {t};
+  return retval;
+}
 
 } }

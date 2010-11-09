@@ -4,6 +4,7 @@
 #include <typeinfo>
 #include <carbon/utility/intmap.hpp>
 #include <carbon/lambda/expr.hpp>
+#include <carbon/lambda/debug.hpp>
 
 using namespace std;
 
@@ -34,7 +35,7 @@ int main()
 
   cout << sizeof(2.0 / _1 + _2 + 1, _a) << "\n";
   2.0 / _1 + _2 + 1, _a[0], 1;
-  _a = 1+34+_a, _3[
+  _a = 1+34+_a, if_(_3)[
                    _a, _b = 3, _c=_d];
 
   cout << matches<expr<tag::add, int>, tag::add, _>::value << "\n";
@@ -42,5 +43,10 @@ int main()
   using namespace carbon::utility::debug;
   
   cout << "vector :" << append_vectors()(make_vector()(1,"teST"), make_vector()(2, "test2")) << "\n";
+
+  using namespace carbon::lambda::debug;
+
+  printexpr(if_(_b[0])[_a=1,_d=_1]);
+  std::cerr << "\n";
   return 0;
 }
