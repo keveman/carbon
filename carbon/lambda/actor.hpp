@@ -1,11 +1,19 @@
 #pragma once
 
+#include <carbon/utility/type_functions.hpp>
 #include <carbon/utility/config.hpp>
 #include <carbon/utility/vector.hpp>
 
 namespace carbon { namespace lambda {
 
 using namespace carbon::utility;
+
+template <typename actor_t, typename Vec>
+struct actor_result {
+
+  typedef typename actor_t::template result<Vec>::type type;
+  typedef typename carbon::utility::detail::remove_reference<type>::type plain_type;
+};
 
 template <typename base_t>
 struct actor : public base_t {
