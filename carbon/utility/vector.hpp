@@ -5,12 +5,19 @@
 
 namespace carbon { namespace utility {
 
-struct endmarker {};
+struct endmarker {char dummy;};
 
 template<typename H, typename T>
 struct vector {
   H elem;
   T rest;
+
+  __host__ __device__
+  vector(H _e) : rest(T()), elem(_e) {}
+
+  __host__ __device__
+  vector(H _e, T _r) : rest(_r), elem(_e) {}
+
 };
 
 struct make_vector {
@@ -42,7 +49,7 @@ struct make_vector {
   __host__ __device__
   typename result<make_vector(T1)>::type
   operator()(T1 t1) {
-    typename result<make_vector(T1)>::type retval = {t1};
+    typename result<make_vector(T1)>::type retval(t1);
     return retval;
   }
 
@@ -50,8 +57,8 @@ struct make_vector {
   __host__ __device__
   typename result<make_vector(T1, T2)>::type
   operator()(T1 t1, T2 t2) {
-    typename result<make_vector(T1, T2)>::type retval = {t1,
-                                                         make_vector().operator()<T2>(t2)};
+    typename result<make_vector(T1, T2)>::type retval(t1,
+                                                      make_vector().operator()<T2>(t2));
     return retval;
   }
 
@@ -59,8 +66,8 @@ struct make_vector {
   __host__ __device__
   typename result<make_vector(T1, T2, T3)>::type
   operator()(T1 t1, T2 t2, T3 t3) {
-    typename result<make_vector(T1, T2, T3)>::type retval = {t1,
-                                                             make_vector().operator()<T2, T3>(t2, t3)};
+    typename result<make_vector(T1, T2, T3)>::type retval(t1,
+                                                          make_vector().operator()<T2, T3>(t2, t3));
     return retval;
   }
 
@@ -68,8 +75,8 @@ struct make_vector {
   __host__ __device__
   typename result<make_vector(T1, T2, T3, T4)>::type
   operator()(T1 t1, T2 t2, T3 t3, T4 t4) {
-    typename result<make_vector(T1, T2, T3, T4)>::type retval = {t1,
-                                                                 make_vector().operator()<T2, T3, T4>(t2, t3, t4)};
+    typename result<make_vector(T1, T2, T3, T4)>::type retval(t1,
+                                                              make_vector().operator()<T2, T3, T4>(t2, t3, t4));
     return retval;
   }
 };
