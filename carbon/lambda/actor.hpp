@@ -38,6 +38,35 @@ struct actor : public base_t {
     return base_t::eval(make_vector().operator()<A0 const &>(a0));
   }
 
+  template<typename A0, typename A1>
+  __host__ __device__
+  typename base_t::template result<typename make_vector::result<make_vector(A0 &, A1 &)>::type>::type
+  operator()(A0 &a0, A1 &a1) const {
+    return base_t::eval(make_vector().operator()<A0 &, A1 &>(a0, a1));
+  }
+
+  template<typename A0, typename A1>
+  __host__ __device__
+  typename base_t::template result<typename make_vector::result<make_vector(A0 const&, A1 &)>::type>::type
+  operator()(A0 const &a0, A1 &a1) const {
+    return base_t::eval(make_vector().operator()<A0 const&, A1 &>(a0, a1));
+  }
+
+  template<typename A0, typename A1>
+  __host__ __device__
+  typename base_t::template result<typename make_vector::result<make_vector(A0 &, A1 const&)>::type>::type
+  operator()(A0 &a0, A1 const &a1) const {
+    return base_t::eval(make_vector().operator()<A0 &, A1 const&>(a0, a1));
+  }
+
+  template<typename A0, typename A1>
+  __host__ __device__
+  typename base_t::template result<typename make_vector::result<make_vector(A0 const&, A1 const&)>::type>::type
+  operator()(A0 const &a0, A1 const &a1) const {
+    return base_t::eval(make_vector().operator()<A0 const&, A1 const&>(a0, a1));
+  }
+
+
 };
 
 template<typename T>

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <carbon/lambda/primitives.hpp>
+#include <carbon/lambda/operators.hpp>
 
 using namespace std;
 using namespace carbon::lambda;
@@ -7,8 +8,8 @@ using namespace carbon::lambda;
 template<typename F>
 __global__ void kernel(int *a, F f)
 {
-  int i=42;
-  *a = f(42);
+  int i=43;
+  *a = f(42, i);
 }
 
 int main()
@@ -17,7 +18,7 @@ int main()
   int *da, ha;
   cudaMalloc((void **)&da, sizeof(int));
 
-  kernel<<<1,1>>>(da, arg1);
+  kernel<<<1,1>>>(da, arg2);
 
   cudaMemcpy(&ha, da, sizeof(int), cudaMemcpyDeviceToHost);
 
