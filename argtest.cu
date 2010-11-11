@@ -9,7 +9,7 @@ template<typename F>
 __global__ void kernel(int *a, F f)
 {
   int i=43;
-  *a = f(42, i);
+  *a = f(42);
 }
 
 int main()
@@ -18,7 +18,7 @@ int main()
   int *da, ha;
   cudaMalloc((void **)&da, sizeof(int));
 
-  kernel<<<1,1>>>(da, arg2);
+  kernel<<<1,1>>>(da, -arg1);
 
   cudaMemcpy(&ha, da, sizeof(int), cudaMemcpyDeviceToHost);
 

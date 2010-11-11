@@ -5,8 +5,6 @@
 
 namespace carbon { namespace lambda {
 
-struct nil_t { char dummy; };
-
 template<typename op_t,
 typename A0=nil_t,
 typename A1=nil_t,

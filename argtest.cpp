@@ -7,6 +7,6 @@ using namespace carbon::lambda;
 
 int main()
 {
-  cout << arg2(42, 42) << "\n";
+  cout << -arg2(43, 42) << "\n";
   return 0;
 }
