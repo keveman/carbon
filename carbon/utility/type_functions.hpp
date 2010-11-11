@@ -14,6 +14,25 @@ struct is_same<U, U> {
   static const bool value = true;
 };
 
+template<typename T>
+struct remove_reference {
+  typedef T type;
+};
+
+template<typename T>
+struct remove_reference<T &> {
+  typedef T type;
+};
+
+template<typename T>
+struct remove_reference<T const&> {
+  typedef T type;
+};
+
+template<typename T>
+struct remove_reference<T const volatile&> {
+  typedef T type;
+};
 
 }
 } }
