@@ -26,7 +26,7 @@ struct function {
   operator()(A0 const &_a0) const {
     typedef typename detail::make_composite<op_t, A0>::composite_type
       ret_t;
-    return ret_t(op, as_actor<A0>::convert(a0));
+    return ret_t(op, as_actor<A0>::convert(_a0));
   }
 
   template<typename A0, typename A1>
@@ -35,7 +35,7 @@ struct function {
   operator()(A0 const &_a0, A1 const &_a1) const {
     typedef typename detail::make_composite<op_t, A0, A1>::composite_type
       ret_t;
-    return ret_t(op, as_actor<A0>::convert(a0), as_actor::convert(a1));
+    return ret_t(op, as_actor<A0>::convert(_a0), as_actor<A1>::convert(_a1));
   }
 
 };
