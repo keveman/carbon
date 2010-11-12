@@ -144,4 +144,61 @@ if_(cond_t const& cond)
   return if_gen<cond_t>(cond);
 }
 
+template <typename cond_t, typename do_t>
+struct while_composite {
+
+  typedef while_composite<cond_t, do_t> self_t;
+
+  template <typename TupleT>
+  struct result { typedef void type; };
+
+  cond_t cond;
+  do_t do_;
+
+  __host__ __device__
+  while_composite(cond_t const& cond_, do_t const& do__)
+    :   cond(cond_), do_(do__) {}
+
+  template <typename TupleT>
+  __host__ __device__
+  void eval(TupleT const& args) const {
+    while (cond.eval(args))
+      do_.eval(args);
+  }
+};
+
+template <typename cond_t>
+struct while_gen {
+
+  cond_t cond;
+
+  __host__ __device__
+  while_gen(cond_t const& cond_)
+    :   cond(cond_) {}
+
+  template <typename do_t>
+  __host__ __device__
+  actor<while_composite<
+        typename as_actor<cond_t>::type,
+        typename as_actor<do_t>::type> >
+  operator[](do_t const& do_) const {
+    typedef while_composite<
+    typename as_actor<cond_t>::type,
+      typename as_actor<do_t>::type>
+    result;
+
+    return result(
+                  as_actor<cond_t>::convert(cond),
+                  as_actor<do_t>::convert(do_));
+  }
+};
+
+template <typename cond_t>
+__host__ __device__
+inline while_gen<cond_t>
+while_(cond_t const& cond)
+{
+  return while_gen<cond_t>(cond);
+}
+
 } }
