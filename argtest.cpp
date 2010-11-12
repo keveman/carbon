@@ -5,8 +5,15 @@
 using namespace std;
 using namespace carbon::lambda;
 
+template<typename F>
+void foo(F f)
+{
+  int i=42;
+  cout << f(i) << "\n";
+}
+
 int main()
 {
-  cout << -arg2(43, 42) << "\n";
+  foo(-arg1);
   return 0;
 }

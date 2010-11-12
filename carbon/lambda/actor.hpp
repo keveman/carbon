@@ -8,6 +8,10 @@ namespace carbon { namespace lambda {
 
 struct nil_t { char dummy; };
 
+namespace detail {
+template<typename op_t, typename base_t, typename B>
+struct make_binary1;
+}
 using namespace carbon::utility;
 
 template <typename actor_t, typename Vec>
@@ -82,6 +86,15 @@ struct as_actor<actor<base_t> > {
   static type convert(actor<base_t> const &x) {
     return x;
   }
+};
+
+template <>
+struct as_actor<nil_t> {
+
+  typedef nil_t type;
+  __host__ __device__
+  static nil_t convert(nil_t /*x*/)
+  { return nil_t(); }
 };
 
 template<>
