@@ -30,10 +30,118 @@ struct sequential_composite {
 };
 
 template <typename baseT0, typename baseT1>
+__host__ __device__
 inline actor<sequential_composite<actor<baseT0>, actor<baseT1> > >
 operator,(actor<baseT0> const& _0, actor<baseT1> const& _1)
 {
   return sequential_composite<actor<baseT0>, actor<baseT1> >(_0, _1);
+}
+
+template <typename cond_t, typename then_t, typename else_t>
+struct if_then_else_composite {
+
+  typedef if_then_else_composite<cond_t, then_t, else_t> self_t;
+
+  template <typename TupleT>
+  struct result {
+    typedef void type;
+  };
+
+  cond_t cond; then_t then; else_t else_;
+  
+  __host__ __device__
+  if_then_else_composite(
+                         cond_t const& cond_,
+                         then_t const& then_,
+                         else_t const& else__)
+    :   cond(cond_), then(then_), else_(else__) {}
+
+  template <typename TupleT>
+  __host__ __device__
+  void eval(TupleT const& args) const {
+    if (cond.eval(args))
+      then.eval(args);
+    else
+      else_.eval(args);
+  }
+};
+
+template <typename cond_t, typename then_t>
+struct else_gen {
+  cond_t cond; then_t then;
+
+  __host__ __device__
+  else_gen(cond_t const& cond_, then_t const& then_)
+    :   cond(cond_), then(then_) {}
+
+  template <typename else_t>
+  __host__ __device__
+  actor<if_then_else_composite<cond_t, then_t,
+        typename as_actor<else_t>::type> >
+  operator[](else_t const& else_) {
+    typedef if_then_else_composite<cond_t, then_t,
+      typename as_actor<else_t>::type>
+      result;
+
+    return result(cond, then, as_actor<else_t>::convert(else_));
+  }
+};
+
+template <typename cond_t, typename then_t>
+struct if_then_composite {
+
+  typedef if_then_composite<cond_t, then_t> self_t;
+
+  cond_t cond; then_t then;
+  else_gen<cond_t, then_t> else_;
+  
+  template <typename TupleT>
+  struct result { typedef void type; };
+
+  __host__ __device__
+  if_then_composite(cond_t const& cond_, then_t const& then_)
+    :   cond(cond_), then(then_), else_(cond, then) {}
+
+  template <typename TupleT>
+  __host__ __device__
+  void eval(TupleT const& args) const {
+    if (cond.eval(args))
+      then.eval(args);
+  }
+};
+
+template <typename cond_t>
+struct if_gen {
+
+  cond_t cond;
+
+  __host__ __device__
+  if_gen(cond_t const& cond_)
+    :   cond(cond_) {}
+
+  template <typename then_t>
+  __host__ __device__
+  actor<if_then_composite<
+        typename as_actor<cond_t>::type,
+        typename as_actor<then_t>::type> >
+  operator[](then_t const& then) const {
+    typedef if_then_composite<
+    typename as_actor<cond_t>::type,
+      typename as_actor<then_t>::type>
+    result;
+
+    return result(
+                  as_actor<cond_t>::convert(cond),
+                  as_actor<then_t>::convert(then));
+  }
+};
+
+template <typename cond_t>
+__host__ __device__
+inline if_gen<cond_t>
+if_(cond_t const& cond)
+{
+  return if_gen<cond_t>(cond);
 }
 
 } }
