@@ -13,6 +13,8 @@ struct add_op;
 struct sub_op;
 struct mul_op;
 struct div_op;
+struct assign_op;
+//struct index_op;
 
 template<typename tag_t, typename T>
 struct unary_operator;
@@ -56,6 +58,15 @@ DEF(mul_op, *)
 DEF(div_op, /)
 
 #undef DEF
+
+template<typename T0, typename T1>
+struct binary_operator<assign_op, T0, T1> {
+  typedef T0& result_type;
+  __host__ __device__
+  static result_type eval(T0 &lhs, T1 const &rhs) {
+    return lhs = rhs;
+  }
+};
 
 struct negate_op {
   template<typename T0>
@@ -147,4 +158,19 @@ DEF(mul_op, *)
 DEF(div_op, /)
 
 #undef DEF
+
+struct assign_op {
+  template<typename T0, typename T1>
+  struct result {
+    typedef typename binary_operator<assign_op, T0, T1>::result_type type;
+  };
+
+  template<typename T0, typename T1>
+  __host__ __device__
+  typename binary_operator<assign_op, T0, T1>::result_type
+  operator()(T0 &_0, T1 &_1) const {
+    return binary_operator<assign_op, T0, T1>::eval(_0, _1);
+  }
+};
+
 } }

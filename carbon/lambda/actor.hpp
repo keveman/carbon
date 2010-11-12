@@ -8,6 +8,9 @@ namespace carbon { namespace lambda {
 
 struct nil_t { char dummy; };
 
+struct assign_op;
+//struct index_op;
+
 namespace detail {
 template<typename op_t, typename base_t, typename B>
 struct make_binary1;
@@ -72,7 +75,12 @@ struct actor : public base_t {
     return base_t::eval(make_vector().operator()<A0 const&, A1 const&>(a0, a1));
   }
 
-
+  template<typename B>
+  __host__ __device__
+  typename detail::make_binary1<assign_op, base_t, B>::type
+  operator =(B const &b) const {
+    return detail::make_binary1<assign_op, base_t, B>::construct(*this, b);
+  }
 };
 
 template<typename T>
