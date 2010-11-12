@@ -14,6 +14,6 @@ void foo(F f)
 
 int main()
 {
-  foo(-arg1);
+  foo(arg1+arg1);
   return 0;
 }

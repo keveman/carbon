@@ -101,4 +101,50 @@ operator +(actor<base_t> const& _0)
   return detail::make_unary<ident_op, base_t>::construct(_0);
 }
 
+#define DEF(TAG, OP)                                                    \
+struct TAG {                                                            \
+  template<typename T0, typename T1>                                    \
+  struct result {                                                       \
+    typedef typename binary_operator<TAG, T0, T1>::result_type type;    \
+  };                                                                    \
+                                                                        \
+  template<typename T0, typename T1>                                    \
+  __host__ __device__                                                   \
+  typename binary_operator<TAG, T0, T1>::result_type                    \
+  operator()(T0 &_0, T1 &_1) const {                                    \
+    return binary_operator<TAG, T0, T1>::eval(_0, _1);                  \
+  }                                                                     \
+};                                                                      \
+                                                                        \
+ template<typename base_t, typename T1>                                 \
+ __host__ __device__                                                    \
+ inline typename detail::make_binary1<TAG, base_t, T1>::type            \
+ operator OP(actor<base_t> const &_0, T1 const &_1)                     \
+ {                                                                      \
+   return detail::make_binary1<TAG, base_t, T1>::construct(_0, _1);     \
+ }                                                                      \
+                                                                        \
+ template<typename T0, typename base_t>                                 \
+ __host__ __device__                                                    \
+ inline typename detail::make_binary2<TAG, T0, base_t>::type            \
+ operator OP(T0 const &_0, actor<base_t> const &_1)                     \
+ {                                                                      \
+   return detail::make_binary2<TAG, T0, base_t>::construct(_0, _1);     \
+ }                                                                      \
+                                                                        \
+ template<typename baseT0, typename baseT1>                             \
+ __host__ __device__                                                    \
+ inline typename detail::make_binary3<TAG, baseT0, baseT1>::type        \
+ operator OP(actor<baseT0> const &_0, actor<baseT1> const &_1)          \
+ {                                                                      \
+   return detail::make_binary3<TAG, baseT0, baseT1>::construct(_0, _1); \
+ }                                                                      \
+ /**/
+
+DEF(add_op, +)
+DEF(sub_op, -)
+DEF(mul_op, *)
+DEF(div_op, /)
+
+#undef DEF
 } }

@@ -18,7 +18,7 @@ int main()
   int *da, ha;
   cudaMalloc((void **)&da, sizeof(int));
 
-  kernel<<<1,1>>>(da, -arg2);
+  kernel<<<1,1>>>(da, -arg2+arg1+2-arg1);
 
   cudaMemcpy(&ha, da, sizeof(int), cudaMemcpyDeviceToHost);
 
