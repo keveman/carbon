@@ -14,6 +14,10 @@ struct sub_op;
 struct mul_op;
 struct div_op;
 struct assign_op;
+struct lt_op;
+struct lte_op;
+struct gt_op;
+struct gte_op;
 //struct index_op;
 
 template<typename tag_t, typename T>
@@ -56,6 +60,10 @@ DEF(add_op, +)
 DEF(sub_op, -)
 DEF(mul_op, *)
 DEF(div_op, /)
+DEF(lt_op, <)
+DEF(lte_op, <=)
+DEF(gt_op, >)
+DEF(gte_op, >=)
 
 #undef DEF
 
@@ -156,6 +164,10 @@ DEF(add_op, +)
 DEF(sub_op, -)
 DEF(mul_op, *)
 DEF(div_op, /)
+DEF(lt_op, <)
+DEF(lte_op, <=)
+DEF(gt_op, >)
+DEF(gte_op, >=)
 
 #undef DEF
 

@@ -2,6 +2,7 @@
 
 #include <carbon/utility/config.hpp>
 #include <carbon/lambda/composite.hpp>
+#include <carbon/lambda/functions.hpp>
 #include <thrust/tuple.h>
 
 namespace carbon { namespace lambda {
@@ -30,5 +31,40 @@ get_(A0 const &_a0)
     ret_t;
   return ret_t(get_impl<N>(), as_actor<A0>::convert(_a0));
 }
+
+struct fabsdiff_impl {
+  template<typename T0, typename T1>
+  struct result;
+
+  __host__ __device__
+  float operator()(float const &a, float const &b) const {
+    return fabs(b - a);
+  }
+};
+
+template<>
+struct fabsdiff_impl::result<float, float> {
+  typedef float type;
+};
+
+function<fabsdiff_impl> const fabsdiff_;
+
+struct max_impl {
+  template<typename T0, typename T1>
+  struct result;
+
+  template<typename T>
+  struct result<T, T> {
+    typedef T type;
+  };
+  
+  template<typename T>
+  __host__ __device__
+  T operator()(T const &a, T const &b) const {
+    return max(a, b);
+  }
+};
+
+function<max_impl> const max_;
 
 } }
