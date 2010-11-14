@@ -42,9 +42,27 @@ int main()
 
   cout << _b.eval(append_vectors()(a,b)) << "\n";
 
-  int jj;
-  let_(_a=41)[let_(_b=1)[_1 = _a+_b]](jj);
-
+  bool jj;
+  let_(_a=_1)[
+    let_(_b=42)[
+      if_(_a == _b) [
+        _2 = true
+      ].else_[
+        _2 = false
+      ]
+    ]  
+  ](42, jj);
   cout << jj << "\n";
+
+  int i=0, j=41;
+
+  let_(_a=_2) [
+    while_(_a >= 0) [
+      _1 = _1 + 1,
+      _a = _a-1
+    ]
+  ] (i, j);
+
+  cout << i << "\n";
   return 0;
 }
