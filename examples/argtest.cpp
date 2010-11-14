@@ -66,5 +66,7 @@ int main()
   cout << i << "\n";
 
   cout << (let_(_a=i)[_a=256])(0) << "\n";
+
+  cout << (_1+_2+_3)(0, 41, 1) << "\n";
   return 0;
 }

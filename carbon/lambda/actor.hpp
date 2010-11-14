@@ -75,6 +75,25 @@ struct actor : public base_t {
     return base_t::eval(make_vector().operator()<A0 const&, A1 const&>(a0, a1));
   }
 
+#define DEF(X0, CX0, x0, X1, CX1, x1, X2, CX2, x2)                      \
+template<typename X0, typename X1, typename X2>                         \
+ __host__ __device__                                                    \
+ typename base_t::template result<typename make_vector::template result<make_vector(X0 CX0 &, X1 CX1 &, X2 CX2 &)>::type>::type \
+ operator()(X0 CX0 & x0, X1 CX1 & x1, X2 CX2 & x2) const {              \
+  return base_t::eval(make_vector().operator()<X0 CX0 &, X1 CX1 &, X2 CX2 &>(x0, x1, x2)); \
+}                                                                       \
+/**/
+  DEF(A0, , a0, A1, , a1, A2, , a2)
+  DEF(A0, , a0, A1, , a1, A2, const, a2)
+  DEF(A0, , a0, A1, const, a1, A2, , a2)
+  DEF(A0, , a0, A1, const, a1, A2, const, a2)
+  DEF(A0, const, a0, A1, , a1, A2, , a2)
+  DEF(A0, const, a0, A1, , a1, A2, const, a2)
+  DEF(A0, const, a0, A1, const, a1, A2, , a2)
+  DEF(A0, const, a0, A1, const, a1, A2, const, a2)
+
+#undef DEF
+  
   template<typename B>
   __host__ __device__
   typename detail::make_binary1<assign_op, base_t, B>::type
