@@ -2,6 +2,7 @@
 
 #include <carbon/utility/config.hpp>
 #include <carbon/utility/type_functions.hpp>
+#include <iostream>
 
 namespace carbon { namespace utility {
 
@@ -79,6 +80,29 @@ struct make_vector {
                                                               make_vector().operator()<T2, T3, T4>(t2, t3, t4));
     return retval;
   }
+};
+
+template<typename T0=endmarker, typename=endmarker, typename=endmarker, typename=endmarker, typename=endmarker>
+struct vector_type;
+
+template<typename T0>
+struct vector_type<T0, endmarker, endmarker, endmarker, endmarker> {
+  typedef typename make_vector::template result<make_vector(T0)>::type type;
+};
+
+template<typename T0, typename T1>
+struct vector_type<T0, T1, endmarker, endmarker, endmarker> {
+  typedef typename make_vector::template result<make_vector(T0, T1)>::type type;
+};
+
+template<typename T0, typename T1, typename T2>
+struct vector_type<T0, T1, T2, endmarker, endmarker> {
+  typedef typename make_vector::template result<make_vector(T0, T1, T2)>::type type;
+};
+
+template<typename T0, typename T1, typename T2, typename T3>
+struct vector_type<T0, T1, T2, T3, endmarker> {
+  typedef typename make_vector::template result<make_vector(T0, T1, T2, T3)>::type type;
 };
 
 template <typename>
@@ -161,7 +185,7 @@ struct append_vectors {
   typename result<append_vectors(const vector<T1, endmarker>&, const vector<T2, Rest>&)>::type
   operator()(const vector<T1, endmarker> &v1, const vector<T2, Rest> &v2) {
     typename result<append_vectors(const vector<T1, endmarker>&, const vector<T2, Rest>&)>::type
-      retval = {v1.elem, v2};
+      retval(v1.elem, v2);
     return retval;
   }
 
@@ -169,13 +193,12 @@ struct append_vectors {
   typename result<append_vectors(const vector<T1, Rest1>&, const vector<T2, Rest2>&)>::type
   operator()(const vector<T1, Rest1> &v1, const vector<T2, Rest2> &v2) {
     typename result<append_vectors(const vector<T1, Rest1>&, const vector<T2, Rest2>&)>::type
-      retval = {v1.elem, append_vectors()(v1.rest, v2) };
+      retval(v1.elem, append_vectors()(v1.rest, v2));
     return retval;
   }
 };
 
 namespace debug {
-#include <iostream>
 
 template<typename T>
 std::ostream &operator <<(std::ostream &O, const vector<T, endmarker> &v)
