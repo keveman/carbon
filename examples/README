@@ -1,0 +1,5 @@
+The examples can be compiled as follows :
+
+$ g++ -o example example.cu -I . -I $THRUST_INSTALL_PATH
+
+where $THRUST_INSTALL_PATH points to the top level directory where Thrust is installed.
