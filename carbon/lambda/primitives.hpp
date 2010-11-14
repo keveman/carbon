@@ -50,10 +50,32 @@ struct localvar {
   }
 };
 
-actor<localvar<0> > const _a = localvar<0>();
-actor<localvar<1> > const _b = localvar<1>();
-actor<localvar<2> > const _c = localvar<2>();
-actor<localvar<3> > const _d = localvar<3>();
+actor<localvar<0>  > const _a = localvar<0> ();
+actor<localvar<1>  > const _b = localvar<1> ();
+actor<localvar<2>  > const _c = localvar<2> ();
+actor<localvar<3>  > const _d = localvar<3> ();
+actor<localvar<4>  > const _e = localvar<4> ();
+actor<localvar<5>  > const _f = localvar<5> ();
+actor<localvar<6>  > const _g = localvar<6> ();
+actor<localvar<7>  > const _h = localvar<7> ();
+actor<localvar<8>  > const _i = localvar<8> ();
+actor<localvar<9>  > const _j = localvar<9> ();
+actor<localvar<10> > const _k = localvar<10>();
+actor<localvar<11> > const _l = localvar<11>();
+actor<localvar<12> > const _m = localvar<12>();
+actor<localvar<13> > const _n = localvar<13>();
+actor<localvar<14> > const _o = localvar<14>();
+actor<localvar<15> > const _p = localvar<15>();
+actor<localvar<16> > const _q = localvar<16>();
+actor<localvar<17> > const _r = localvar<17>();
+actor<localvar<18> > const _s = localvar<18>();
+actor<localvar<19> > const _t = localvar<19>();
+actor<localvar<20> > const _u = localvar<20>();
+actor<localvar<21> > const _v = localvar<21>();
+actor<localvar<22> > const _w = localvar<22>();
+actor<localvar<23> > const _x = localvar<23>();
+actor<localvar<24> > const _y = localvar<24>();
+actor<localvar<25> > const _z = localvar<25>();
 
 template<typename T>
 struct value {
