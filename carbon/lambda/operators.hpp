@@ -20,6 +20,7 @@ struct gt_op;
 struct gte_op;
 struct eq_op;
 struct neq_op;
+struct mod_op;
 //struct index_op;
 
 template<typename tag_t, typename T>
@@ -68,6 +69,7 @@ DEF(gt_op, >)
 DEF(gte_op, >=)
 DEF(eq_op, ==)
 DEF(neq_op, !=)
+DEF(mod_op, %)
 
 #undef DEF
 
@@ -174,6 +176,7 @@ DEF(gt_op, >)
 DEF(gte_op, >=)
 DEF(eq_op, ==)
 DEF(neq_op, !=)
+DEF(mod_op, %)
 
 #undef DEF
 
