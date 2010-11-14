@@ -39,7 +39,8 @@ struct localvar {
   template<typename Vec>
   struct result {
     typedef typename typeat<Vec, intmap_find<N, Vec>::loc>::type pair_type;
-    typedef typename pair_type::type type;
+    typedef typename carbon::utility::detail::remove_reference<pair_type>::type plain_pair_type;
+    typedef typename plain_pair_type::type type;
   };
 
   template<typename Vec>

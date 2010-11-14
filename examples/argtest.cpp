@@ -41,7 +41,7 @@ int main()
   vector_type<intpair<1, int> >::type b = make_vector()(intpair<1, int>(42));
 
   cout << _b.eval(append_vectors()(a,b)) << "\n";
-
+  
   bool jj;
   let_(_a=_1)[
     let_(_b=42)[
@@ -62,7 +62,9 @@ int main()
       _a = _a-1
     ]
   ] (i, j);
-
+  
   cout << i << "\n";
+
+  cout << (let_(_a=i)[_a=256])(0) << "\n";
   return 0;
 }

@@ -26,6 +26,11 @@ struct intmap_find<N, vector<intpair<N, T>, Rest> > {
   static const unsigned loc = 0;
 };
 
+template<int N, typename T, typename Rest>
+struct intmap_find<N, vector<intpair<N, T>&, Rest> > {
+  static const unsigned loc = 0;
+};
+
 template<int N, int M, typename T, typename Rest>
 struct intmap_find<N, vector<intpair<M, T>, Rest> > {
   static const unsigned loc = 1 + intmap_find<N, Rest>::loc;

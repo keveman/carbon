@@ -34,5 +34,15 @@ struct remove_reference<T const volatile&> {
   typedef T type;
 };
 
+template<typename T>
+struct remove_const {
+  typedef T type;
+};
+
+template<typename T>
+struct remove_const<T const> {
+  typedef T type;
+};
+
 }
 } }

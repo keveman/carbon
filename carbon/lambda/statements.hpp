@@ -209,7 +209,10 @@ struct let1_composite {
   body_t body;
 
   template<typename Vec>
-  struct result { typedef void type; };
+  struct result {
+    typedef typename actor_result<init_t, Vec>::plain_type t_init_type;
+    typedef typename carbon::utility::detail::remove_const<t_init_type>::type type;
+  };
 
   __host__ __device__
   let1_composite(init_t const &init_, body_t const &body_)
@@ -217,12 +220,16 @@ struct let1_composite {
 
   template<typename Vec>
   __host__ __device__
-  void eval(Vec const &args) const {
-    typedef typename actor_result<init_t, Vec>::type init_type;
+  typename result<Vec>::type
+  eval(Vec const &args) const {
+    typedef typename actor_result<init_t, Vec>::plain_type t_init_type;
+    typedef typename carbon::utility::detail::remove_const<t_init_type>::type init_type;
     init_type i = init.eval(args);
-    typename vector_type<intpair<N, init_type> >::type localvalue =
-      make_vector().operator()<intpair<N, init_type> >(intpair<N, init_type>(i));
+    intpair<N, init_type&> ipair(i);
+    typename vector_type<intpair<N, init_type&> &>::type localvalue =
+      make_vector().operator()<intpair<N, init_type&> &>(ipair);
     body.eval(append_vectors()(args, localvalue));
+    return i;
   }
 };
 
