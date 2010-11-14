@@ -2,6 +2,7 @@
 
 #include <carbon/utility/type_functions.hpp>
 #include <carbon/utility/vector.hpp>
+#include <carbon/utility/intmap.hpp>
 #include <carbon/lambda/actor.hpp>
 
 namespace carbon { namespace lambda {
@@ -32,6 +33,27 @@ actor<argument<0> > const _1 = argument<0>();
 actor<argument<1> > const _2 = argument<1>();
 actor<argument<2> > const _3 = argument<2>();
 actor<argument<3> > const _4 = argument<3>();
+
+template<int N>
+struct localvar {
+  template<typename Vec>
+  struct result {
+    typedef typename typeat<Vec, intmap_find<N, Vec>::loc>::type pair_type;
+    typedef typename pair_type::type type;
+  };
+
+  template<typename Vec>
+  __host__ __device__
+  typename result<Vec>::type
+  eval(Vec const &args) const {
+    return find_c<N>(args).second;
+  }
+};
+
+actor<localvar<0> > const _a = localvar<0>();
+actor<localvar<1> > const _b = localvar<1>();
+actor<localvar<2> > const _c = localvar<2>();
+actor<localvar<3> > const _d = localvar<3>();
 
 template<typename T>
 struct value {

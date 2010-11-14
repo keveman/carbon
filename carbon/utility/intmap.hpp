@@ -10,6 +10,8 @@ struct intpair {
   static const int first = N;
   T second;
 
+  typedef T type;
+  
   __host__ __device__
   intpair(T const &_t) : second(_t) {}
 };

@@ -32,6 +32,19 @@ void foo(F f)
 
 int main()
 {
-  foo((arg1=factorial(arg2)));
+  __typeof__((factorial(arg1))) prog = (factorial(arg1));
+  //foo((arg1=factorial(arg2)));
+  foo(arg1=prog(10));
+
+  vector_type<int>::type a = make_vector().operator()<int>(2);
+
+  vector_type<intpair<1, int> >::type b = make_vector()(intpair<1, int>(42));
+
+  cout << _b.eval(append_vectors()(a,b)) << "\n";
+
+  int jj;
+  let_(_a=41)[let_(_b=1)[_1 = _a+_b]](jj);
+
+  cout << jj << "\n";
   return 0;
 }

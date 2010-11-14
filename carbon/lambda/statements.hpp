@@ -201,4 +201,61 @@ while_(cond_t const& cond)
   return while_gen<cond_t>(cond);
 }
 
+template<int N, typename init_t, typename body_t>
+struct let1_composite {
+  typedef let1_composite<N, init_t, body_t> self_t;
+
+  init_t init;
+  body_t body;
+
+  template<typename Vec>
+  struct result { typedef void type; };
+
+  __host__ __device__
+  let1_composite(init_t const &init_, body_t const &body_)
+    : init(init_), body(body_) {}
+
+  template<typename Vec>
+  __host__ __device__
+  void eval(Vec const &args) const {
+    typedef typename actor_result<init_t, Vec>::type init_type;
+    init_type i = init.eval(args);
+    typename vector_type<intpair<N, init_type> >::type localvalue =
+      make_vector().operator()<intpair<N, init_type> >(intpair<N, init_type>(i));
+    body.eval(append_vectors()(args, localvalue));
+  }
+};
+
+template<int N, typename init_t>
+struct let1_gen {
+  init_t init;
+
+  __host__ __device__
+  let1_gen(init_t const &init_)
+    : init(init_) {}
+
+  template<typename body_t>
+  __host__ __device__
+  actor<let1_composite<N,
+        typename as_actor<init_t>::type,
+        typename as_actor<body_t>::type> >
+  operator[](body_t const &body) const {
+    typedef let1_composite<N,
+      typename as_actor<init_t>::type,
+      typename as_actor<body_t>::type>
+      result;
+
+    return result(as_actor<init_t>::convert(init),
+                  as_actor<body_t>::convert(body));
+  }
+};
+
+template<int N, typename init_t>
+__host__ __device__
+inline let1_gen<N, init_t>
+let_(actor<composite<assign_op, actor<localvar<N> >, init_t> > const &init)
+{
+  return let1_gen<N, init_t>(init.a1);
+}
+
 } }
