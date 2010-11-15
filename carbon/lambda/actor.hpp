@@ -93,6 +93,33 @@ template<typename X0, typename X1, typename X2>                         \
   DEF(A0, const, a0, A1, const, a1, A2, const, a2)
 
 #undef DEF
+
+#define DEF(X0, CX0, x0, X1, CX1, x1, X2, CX2, x2, X3, CX3, x3)         \
+template<typename X0, typename X1, typename X2, typename X3>            \
+ __host__ __device__                                                    \
+ typename base_t::template result<typename make_vector::template result<make_vector(X0 CX0 &, X1 CX1 &, X2 CX2 &, X3 CX3 &)>::type>::type \
+ operator()(X0 CX0 & x0, X1 CX1 & x1, X2 CX2 & x2, X3 CX3 & x3) const { \
+  return base_t::eval(make_vector().operator()<X0 CX0 &, X1 CX1 &, X2 CX2 &, X3 CX3 &>(x0, x1, x2, x3)); \
+}                                                                       \
+/**/
+
+  DEF(A0, , a0, A1, , a1, A2, , a2, A3, , a3)
+  DEF(A0, , a0, A1, , a1, A2, , a2, A3, const, a3)
+  DEF(A0, , a0, A1, , a1, A2, const, a2, A3, , a3)
+  DEF(A0, , a0, A1, , a1, A2, const, a2, A3, const, a3)
+  DEF(A0, , a0, A1, const, a1, A2, , a2, A3, , a3)
+  DEF(A0, , a0, A1, const, a1, A2, , a2, A3, const, a3)
+  DEF(A0, , a0, A1, const, a1, A2, const, a2, A3, , a3)
+  DEF(A0, , a0, A1, const, a1, A2, const, a2, A3, const, a3)
+  DEF(A0, const, a0, A1, , a1, A2, , a2, A3, , a3)
+  DEF(A0, const, a0, A1, , a1, A2, , a2, A3, const, a3)
+  DEF(A0, const, a0, A1, , a1, A2, const, a2, A3, , a3)
+  DEF(A0, const, a0, A1, , a1, A2, const, a2, A3, const, a3)
+  DEF(A0, const, a0, A1, const, a1, A2, , a2, A3, , a3)
+  DEF(A0, const, a0, A1, const, a1, A2, , a2, A3, const, a3)
+  DEF(A0, const, a0, A1, const, a1, A2, const, a2, A3, , a3)
+  DEF(A0, const, a0, A1, const, a1, A2, const, a2, A3, const, a3)
+#undef DEF
   
   template<typename B>
   __host__ __device__
