@@ -72,6 +72,6 @@ int main()
   i=0;
   cout << (let_(_a = _1)[_4 = _a+_2+_3])(1,2,3,i) << "\n";
   cout << i << "\n";
-  
+
   return 0;
 }

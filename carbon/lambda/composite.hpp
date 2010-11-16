@@ -10,6 +10,8 @@ typename A0=nil_t,
 typename A1=nil_t,
 typename A2=nil_t,
 typename A3=nil_t,
+typename A4=nil_t,
+typename A5=nil_t,
 typename=nil_t>
 struct composite;
 
@@ -19,7 +21,7 @@ struct composite0_result {
 };
 
 template<typename op_t>
-struct composite<op_t, nil_t, nil_t, nil_t, nil_t, nil_t> {
+struct composite<op_t, nil_t, nil_t, nil_t, nil_t, nil_t, nil_t, nil_t> {
   
   typedef composite<op_t> self_t;
 
@@ -49,7 +51,7 @@ struct composite1_result {
 };
 
 template<typename op_t, typename A0>
-struct composite<op_t, A0, nil_t, nil_t, nil_t, nil_t> {
+struct composite<op_t, A0, nil_t, nil_t, nil_t, nil_t, nil_t, nil_t> {
 
   typedef composite<op_t, A0> self_t;
 
@@ -83,7 +85,7 @@ struct composite2_result {
 };
 
 template<typename op_t, typename A0, typename A1>
-struct composite<op_t, A0, A1, nil_t, nil_t, nil_t> {
+struct composite<op_t, A0, A1, nil_t, nil_t, nil_t, nil_t, nil_t> {
 
   typedef composite<op_t, A0, A1> self_t;
 
@@ -120,7 +122,7 @@ struct composite3_result {
 };
 
 template<typename op_t, typename A0, typename A1, typename A2>
-struct composite<op_t, A0, A1, A2, nil_t, nil_t> {
+struct composite<op_t, A0, A1, A2, nil_t, nil_t, nil_t, nil_t> {
 
   typedef composite<op_t, A0, A1, A2> self_t;
 
@@ -160,7 +162,7 @@ struct composite4_result {
 };
 
 template<typename op_t, typename A0, typename A1, typename A2, typename A3>
-struct composite<op_t, A0, A1, A2, A3, nil_t> {
+struct composite<op_t, A0, A1, A2, A3, nil_t, nil_t, nil_t> {
 
   typedef composite<op_t, A0, A1, A2, A3> self_t;
 
@@ -186,8 +188,102 @@ struct composite<op_t, A0, A1, A2, A3, nil_t> {
     typename actor_result<A0, Vec>::type ra = a0.eval(args);
     typename actor_result<A1, Vec>::type rb = a1.eval(args);
     typename actor_result<A2, Vec>::type rc = a2.eval(args);
-    typename actor_result<A2, Vec>::type rd = a3.eval(args);
+    typename actor_result<A3, Vec>::type rd = a3.eval(args);
     return op(ra, rb, rc, rd);
+  }
+};
+
+template<typename op_t, typename Vec, typename A0, typename A1, typename A2, typename A3, typename A4>
+struct composite5_result {
+  typedef typename op_t::template result<
+  typename actor_result<A0, Vec>::plain_type,
+  typename actor_result<A1, Vec>::plain_type,
+  typename actor_result<A2, Vec>::plain_type,
+  typename actor_result<A3, Vec>::plain_type,
+  typename actor_result<A4, Vec>::plain_type
+  >::type type;
+};
+
+template<typename op_t, typename A0, typename A1, typename A2, typename A3, typename A4>
+struct composite<op_t, A0, A1, A2, A3, A4, nil_t, nil_t> {
+
+  typedef composite<op_t, A0, A1, A2, A3, A4> self_t;
+
+  op_t op;
+  A0 a0;
+  A1 a1;
+  A2 a2;
+  A3 a3;
+  A4 a4;
+  
+  template<typename Vec>
+  struct result {
+    typedef typename composite5_result<op_t, Vec, A0, A1, A2, A3, A4>::type type;
+  };
+
+  __host__ __device__
+  composite(op_t const &op_, A0 const &a0_, A1 const &a1_, A2 const &a2_, A3 const &a3_, A4 const &a4_)
+    : op(op_), a0(a0_), a1(a1_), a2(a2_), a3(a3_), a4(a4_) {}
+
+  template<typename Vec>
+  __host__ __device__
+  typename actor_result<self_t, Vec>::type
+  eval(Vec const &args) const {
+    typename actor_result<A0, Vec>::type ra = a0.eval(args);
+    typename actor_result<A1, Vec>::type rb = a1.eval(args);
+    typename actor_result<A2, Vec>::type rc = a2.eval(args);
+    typename actor_result<A3, Vec>::type rd = a3.eval(args);
+    typename actor_result<A4, Vec>::type re = a4.eval(args);
+    return op(ra, rb, rc, rd, re);
+  }
+};
+
+template<typename op_t, typename Vec, typename A0, typename A1, typename A2, typename A3, typename A4, typename A5>
+struct composite6_result {
+  typedef typename op_t::template result<
+  typename actor_result<A0, Vec>::plain_type,
+  typename actor_result<A1, Vec>::plain_type,
+  typename actor_result<A2, Vec>::plain_type,
+  typename actor_result<A3, Vec>::plain_type,
+  typename actor_result<A4, Vec>::plain_type,
+  typename actor_result<A5, Vec>::plain_type
+  >::type type;
+};
+
+template<typename op_t, typename A0, typename A1, typename A2, typename A3, typename A4, typename A5>
+struct composite<op_t, A0, A1, A2, A3, A4, A5, nil_t> {
+
+  typedef composite<op_t, A0, A1, A2, A3, A4, A5> self_t;
+
+  op_t op;
+  A0 a0;
+  A1 a1;
+  A2 a2;
+  A3 a3;
+  A4 a4;
+  A5 a5;
+  
+  template<typename Vec>
+  struct result {
+    typedef typename composite6_result<op_t, Vec, A0, A1, A2, A3, A4, A5>::type type;
+  };
+
+  __host__ __device__
+  composite(op_t const &op_, A0 const &a0_, A1 const &a1_, A2 const &a2_, A3 const &a3_, A4 const &a4_,
+            A5 const &a5_)
+    : op(op_), a0(a0_), a1(a1_), a2(a2_), a3(a3_), a4(a4_), a5(a5_) {}
+
+  template<typename Vec>
+  __host__ __device__
+  typename actor_result<self_t, Vec>::type
+  eval(Vec const &args) const {
+    typename actor_result<A0, Vec>::type ra = a0.eval(args);
+    typename actor_result<A1, Vec>::type rb = a1.eval(args);
+    typename actor_result<A2, Vec>::type rc = a2.eval(args);
+    typename actor_result<A3, Vec>::type rd = a3.eval(args);
+    typename actor_result<A4, Vec>::type re = a4.eval(args);
+    typename actor_result<A5, Vec>::type rf = a4.eval(args);
+    return op(ra, rb, rc, rd, re, rf);
   }
 };
 
