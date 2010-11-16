@@ -182,6 +182,7 @@ struct append_vectors {
   };
 
   template<typename T1, typename T2, typename Rest>
+  __host__ __device__
   typename result<append_vectors(const vector<T1, endmarker>&, const vector<T2, Rest>&)>::type
   operator()(const vector<T1, endmarker> &v1, const vector<T2, Rest> &v2) {
     typename result<append_vectors(const vector<T1, endmarker>&, const vector<T2, Rest>&)>::type
@@ -190,6 +191,7 @@ struct append_vectors {
   }
 
   template<typename T1, typename Rest1, typename T2, typename Rest2>
+  __host__ __device__
   typename result<append_vectors(const vector<T1, Rest1>&, const vector<T2, Rest2>&)>::type
   operator()(const vector<T1, Rest1> &v1, const vector<T2, Rest2> &v2) {
     typename result<append_vectors(const vector<T1, Rest1>&, const vector<T2, Rest2>&)>::type

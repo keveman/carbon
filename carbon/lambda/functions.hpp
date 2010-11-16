@@ -63,6 +63,35 @@ struct function {
                  as_actor<A3>::convert(_a3));
   }
 
+  template<typename A0, typename A1, typename A2, typename A3, typename A4>
+  __host__ __device__
+  typename detail::make_composite<op_t, A0, A1, A2, A3, A4>::type
+  operator()(A0 const &_a0, A1 const &_a1, A2 const &_a2, A3 const &_a3, A4 const &_a4) const {
+    typedef typename detail::make_composite<op_t, A0, A1, A2, A3, A4>::composite_type
+      ret_t;
+    return ret_t(op,
+                 as_actor<A0>::convert(_a0),
+                 as_actor<A1>::convert(_a1),
+                 as_actor<A2>::convert(_a2),
+                 as_actor<A3>::convert(_a3),
+                 as_actor<A4>::convert(_a4));
+  }
+
+  template<typename A0, typename A1, typename A2, typename A3, typename A4, typename A5>
+  __host__ __device__
+  typename detail::make_composite<op_t, A0, A1, A2, A3, A4, A5>::type
+  operator()(A0 const &_a0, A1 const &_a1, A2 const &_a2, A3 const &_a3, A4 const &_a4, A5 const &_a5) const {
+    typedef typename detail::make_composite<op_t, A0, A1, A2, A3, A4, A5>::composite_type
+      ret_t;
+    return ret_t(op,
+                 as_actor<A0>::convert(_a0),
+                 as_actor<A1>::convert(_a1),
+                 as_actor<A2>::convert(_a2),
+                 as_actor<A3>::convert(_a3),
+                 as_actor<A4>::convert(_a4),
+                 as_actor<A5>::convert(_a5));
+  }
+
 };
 
 } }

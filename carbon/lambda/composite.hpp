@@ -282,7 +282,7 @@ struct composite<op_t, A0, A1, A2, A3, A4, A5, nil_t> {
     typename actor_result<A2, Vec>::type rc = a2.eval(args);
     typename actor_result<A3, Vec>::type rd = a3.eval(args);
     typename actor_result<A4, Vec>::type re = a4.eval(args);
-    typename actor_result<A5, Vec>::type rf = a4.eval(args);
+    typename actor_result<A5, Vec>::type rf = a5.eval(args);
     return op(ra, rb, rc, rd, re, rf);
   }
 };
@@ -293,13 +293,17 @@ template<typename op_t,
 typename A0=nil_t,
 typename A1=nil_t,
 typename A2=nil_t,
-typename A3=nil_t>
+typename A3=nil_t,
+typename A4=nil_t,
+typename A5=nil_t>
 struct make_composite {
   typedef composite<op_t,
   typename as_actor<A0>::type,
   typename as_actor<A1>::type,
   typename as_actor<A2>::type,
-  typename as_actor<A3>::type>
+  typename as_actor<A3>::type,
+  typename as_actor<A4>::type,
+  typename as_actor<A5>::type>
   composite_type;
 
   typedef actor<composite_type> type;
